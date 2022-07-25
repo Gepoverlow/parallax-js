@@ -16,35 +16,13 @@ class EventObserver {
   observeKeysPressed(arrayOfPressedKeys, layers) {
     if (arrayOfPressedKeys.includes("ArrowRight")) {
       for (let i = 0; i < layers.length; i++) {
-        let layerDomElement = layers[i].getDomElement();
-        let layerCurrentX = layers[i].getXpositionI();
-        let layerMovMultiplier = layers[i].getMovementMultiplier();
-        let layerFutureX = layerCurrentX - 15 * layerMovMultiplier;
-        layerDomElement.style.backgroundPositionX = layerFutureX + "px";
-        layers[i].setXpositionI(layerFutureX);
-
-        layers[i].checkForTranslateForwards();
-
-        if (layers[i].getXpositionI() < layers[i].getXpositionF()) {
-          layers[i].setXpositionI(screen.width);
-        }
+        layers[i].moveLayerRight();
       }
     }
 
     if (arrayOfPressedKeys.includes("ArrowLeft")) {
       for (let i = 0; i < layers.length; i++) {
-        let layerDomElement = layers[i].getDomElement();
-        let layerCurrentX = layers[i].getXpositionI();
-        let layerMovMultiplier = layers[i].getMovementMultiplier();
-        let layerFutureX = layerCurrentX + 15 * layerMovMultiplier;
-        layerDomElement.style.backgroundPositionX = layerFutureX + "px";
-        layers[i].setXpositionI(layerFutureX);
-
-        layers[i].checkForTranslateBackwards();
-
-        if (layers[i].getXpositionI() > screen.width) {
-          layers[i].setXpositionI(layers[i].getXpositionF());
-        }
+        layers[i].moveLayerLeft();
       }
     }
   }
@@ -188,8 +166,6 @@ class Layer {
   }
 
   checkForTranslateBackwards() {
-    console.log(this.getXpositionI());
-    console.log(this.getXpositionF());
     if (
       this.getXpositionI() > screen.width - 30 ||
       this.getXpositionI() < this.getXpositionF() - 30
@@ -197,6 +173,36 @@ class Layer {
       this.#domElement.classList.remove("transition-effect");
     } else if (this.getXpositionI() > this.getXpositionF() + 80) {
       this.#domElement.classList.add("transition-effect");
+    }
+  }
+
+  moveLayerRight() {
+    let layerDomElement = this.getDomElement();
+    let layerCurrentX = this.getXpositionI();
+    let layerMovMultiplier = this.getMovementMultiplier();
+    let layerFutureX = layerCurrentX - 15 * layerMovMultiplier;
+    layerDomElement.style.backgroundPositionX = layerFutureX + "px";
+    this.setXpositionI(layerFutureX);
+
+    this.checkForTranslateForwards();
+
+    if (this.getXpositionI() < this.getXpositionF()) {
+      this.setXpositionI(screen.width);
+    }
+  }
+
+  moveLayerLeft() {
+    let layerDomElement = this.getDomElement();
+    let layerCurrentX = this.getXpositionI();
+    let layerMovMultiplier = this.getMovementMultiplier();
+    let layerFutureX = layerCurrentX + 15 * layerMovMultiplier;
+    layerDomElement.style.backgroundPositionX = layerFutureX + "px";
+    this.setXpositionI(layerFutureX);
+
+    this.checkForTranslateBackwards();
+
+    if (this.getXpositionI() > screen.width) {
+      this.setXpositionI(this.getXpositionF());
     }
   }
 }
