@@ -16,27 +16,72 @@
   height: 100vh;
   width: 100vw;
   background-repeat: no-repeat;
-  background-size: contain;
+  /* transition: all 0.4s ease; */
+  /* background-size: cover;  */
 }
 
 #bg-space-big-planet {
   background-image: url("./space_background_pack/layers/parallax-space-big-planet.png");
   background-position-x: 900px;
   background-position-y: 100px;
-  background-size: 30%;
+  background-size: 350px;
+  animation: bgScrollBigPlanet 50s linear infinite;
 }
 
 #bg-space-far-planets {
   background-image: url("./space_background_pack/layers/parallax-space-far-planets.png");
-  background-position: center;
+  background-position-y: 50px;
+  background-position-x: 100px;
+  background-size: 900px;
+  animation: bgScrollFarPlanets 30s linear infinite;
 }
 
 #bg-space-ring-planet {
   background-image: url("./space_background_pack/layers/parallax-space-ring-planet.png");
-  background-size: 20%;
-  background-position-y: 100px;
+  background-size: 200px;
+  background-position-y: 200px;
+  background-position-x: 0px;
+  animation: bgScrollRingPlanet 10s linear infinite;
 }
 
 #bg-space-stars {
   background-image: url("./space_background_pack/layers/parallax-space-stars.png");
+  background-size: 100%;
+  animation: bgScrollStars 80s linear infinite;
 }
+
+/* @keyframes bgScrollRingPlanet {
+  100% {
+    background-position-x: -150px;
+  }
+  0% {
+    background-position-x: 100vw;
+  }
+}
+
+@keyframes bgScrollBigPlanet {
+  0% {
+    background-position-x: 100vw;
+  }
+  100% {
+    background-position-x: -300px;
+  }
+}
+
+@keyframes bgScrollFarPlanets {
+  0% {
+    background-position-x: 100vw;
+  }
+  100% {
+    background-position-x: -900px;
+  }
+}
+
+@keyframes bgScrollStars {
+  0% {
+    background-position-x: 100vw;
+  }
+  100% {
+    background-position-x: -900px;
+  }
+} */
