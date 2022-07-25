@@ -3,26 +3,34 @@ class EventObserver {
     if (arrayOfPressedKeys.includes("ArrowRight")) {
       for (let i = 0; i < layers.length; i++) {
         let layerDomElement = layers[i].getDomElement();
-        let layerCurrentX = layers[i].getXposition();
+        let layerCurrentX = layers[i].getXpositionI();
         let layerMovMultiplier = layers[i].getMovementMultiplier();
-        let layerFutureX = layerCurrentX - 3 * layerMovMultiplier;
+        let layerFutureX = layerCurrentX - 15 * layerMovMultiplier;
         layerDomElement.style.backgroundPositionX = layerFutureX + "px";
-        layers[i].setXposition(layerFutureX);
+        layers[i].setXpositionI(layerFutureX);
 
-        layers[i].getXposition() < -300 ? layers[i].setXposition(1500) : null;
+        layers[i].checkForTranslateForwards();
+
+        if (layers[i].getXpositionI() < layers[i].getXpositionF()) {
+          layers[i].setXpositionI(screen.width);
+        }
       }
     }
 
     if (arrayOfPressedKeys.includes("ArrowLeft")) {
       for (let i = 0; i < layers.length; i++) {
         let layerDomElement = layers[i].getDomElement();
-        let layerCurrentX = layers[i].getXposition();
+        let layerCurrentX = layers[i].getXpositionI();
         let layerMovMultiplier = layers[i].getMovementMultiplier();
-        let layerFutureX = layerCurrentX + 3 * layerMovMultiplier;
+        let layerFutureX = layerCurrentX + 15 * layerMovMultiplier;
         layerDomElement.style.backgroundPositionX = layerFutureX + "px";
-        layers[i].setXposition(layerFutureX);
+        layers[i].setXpositionI(layerFutureX);
 
-        layers[i].getXposition() > 1500 ? layers[i].setXposition(-300) : null;
+        layers[i].checkForTranslateBackwards();
+
+        if (layers[i].getXpositionI() > screen.width) {
+          layers[i].setXpositionI(layers[i].getXpositionF());
+        }
       }
     }
   }

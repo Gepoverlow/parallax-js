@@ -6,10 +6,20 @@ class Game {
   #farPlanetsLayer;
   #ringPlanetLayer;
   constructor() {
-    this.#starsLayer = new Layer(0, document.getElementById("bg-space-stars"), 1);
-    this.#bigPlanetLayer = new Layer(900, document.getElementById("bg-space-big-planet"), 1.5);
-    this.#farPlanetsLayer = new Layer(100, document.getElementById("bg-space-far-planets"), 2);
-    this.#ringPlanetLayer = new Layer(0, document.getElementById("bg-space-ring-planet"), 2.5);
+    this.#starsLayer = new Layer(0, -screen.width, document.getElementById("bg-space-stars"), 0.1);
+    this.#bigPlanetLayer = new Layer(
+      900,
+      -333,
+      document.getElementById("bg-space-big-planet"),
+      0.3
+    );
+    this.#farPlanetsLayer = new Layer(
+      100,
+      -750,
+      document.getElementById("bg-space-far-planets"),
+      0.7
+    );
+    this.#ringPlanetLayer = new Layer(0, -180, document.getElementById("bg-space-ring-planet"), 1);
   }
 
   getStarsLayer() {
