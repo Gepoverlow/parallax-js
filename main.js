@@ -13,7 +13,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "EventObserver": () => (/* binding */ EventObserver)
 /* harmony export */ });
 class EventObserver {
-  observeKeysPressed(arrayOfPressedKeys, layers) {
+  observeKeysPressed(arrayOfPressedKeys, layers, spaceship) {
     if (arrayOfPressedKeys.includes("ArrowRight")) {
       for (let i = 0; i < layers.length; i++) {
         layers[i].moveLayerRight();
@@ -25,11 +25,21 @@ class EventObserver {
         layers[i].moveLayerLeft();
       }
     }
+
+    if (arrayOfPressedKeys.includes("ArrowUp")) {
+      console.log("moves up");
+      spaceship.moveUp();
+    }
+
+    if (arrayOfPressedKeys.includes("ArrowDown")) {
+      console.log("moves down");
+      spaceship.moveDown();
+    }
   }
 
-  observe(arrayOfPressedKeys, layers) {
+  observe(arrayOfPressedKeys, layers, spaceship) {
     setInterval(() => {
-      this.observeKeysPressed(arrayOfPressedKeys, layers);
+      this.observeKeysPressed(arrayOfPressedKeys, layers, spaceship);
     }, 100);
   }
 }
@@ -50,6 +60,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Game": () => (/* binding */ Game)
 /* harmony export */ });
 /* harmony import */ var _Layer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Layer */ "./src/classes/Layer.js");
+/* harmony import */ var _Spaceship__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Spaceship */ "./src/classes/Spaceship.js");
+
 
 
 class Game {
@@ -57,6 +69,8 @@ class Game {
   #bigPlanetLayer;
   #farPlanetsLayer;
   #ringPlanetLayer;
+
+  #spaceShip;
   constructor() {
     this.#starsLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(0, -screen.width, document.getElementById("bg-space-stars"), 0.1);
     this.#bigPlanetLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(
@@ -72,6 +86,8 @@ class Game {
       0.7
     );
     this.#ringPlanetLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(0, -180, document.getElementById("bg-space-ring-planet"), 1);
+
+    this.#spaceShip = new _Spaceship__WEBPACK_IMPORTED_MODULE_1__.Spaceship();
   }
 
   getStarsLayer() {
@@ -92,6 +108,10 @@ class Game {
 
   getArrayOfLayers() {
     return [this.#starsLayer, this.#bigPlanetLayer, this.#farPlanetsLayer, this.#ringPlanetLayer];
+  }
+
+  getSpaceship() {
+    return this.#spaceShip;
   }
 }
 
@@ -210,6 +230,80 @@ class Layer {
 
 
 
+/***/ }),
+
+/***/ "./src/classes/Spaceship.js":
+/*!**********************************!*\
+  !*** ./src/classes/Spaceship.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Spaceship": () => (/* binding */ Spaceship)
+/* harmony export */ });
+class Spaceship {
+  #bgPositionX;
+  #bgPositionY;
+  #domElement;
+
+  #movSpeed;
+
+  constructor() {
+    this.#bgPositionX = 200;
+    this.#bgPositionY = 200;
+    this.#domElement = document.getElementById("spaceship");
+    this.#movSpeed = 40;
+  }
+
+  moveUp() {
+    let spaceshipDomElement = this.getDomElement();
+    let previousYposition = this.getYposition();
+    let futureYposition = previousYposition - this.getMovSpeed();
+    this.setYposition(futureYposition);
+    spaceshipDomElement.style.backgroundPositionY = futureYposition + "px";
+  }
+
+  moveDown() {
+    let spaceshipDomElement = this.getDomElement();
+    let previousYposition = this.getYposition();
+    let futureYposition = previousYposition + this.getMovSpeed();
+    this.setYposition(futureYposition);
+    spaceshipDomElement.style.backgroundPositionY = futureYposition + "px";
+  }
+
+  getXposition() {
+    return this.#bgPositionX;
+  }
+
+  setXposition(newX) {
+    this.#bgPositionX = newX;
+  }
+
+  getYposition() {
+    return this.#bgPositionY;
+  }
+
+  setYposition(newY) {
+    this.#bgPositionY = newY;
+  }
+
+  getDomElement() {
+    return this.#domElement;
+  }
+
+  getMovSpeed() {
+    return this.#movSpeed;
+  }
+
+  setMovSpeed(newSpeed) {
+    this.#movSpeed = newSpeed;
+  }
+}
+
+
+
+
 /***/ })
 
 /******/ 	});
@@ -306,7 +400,7 @@ function removePressedKey(e) {
   }
 }
 
-EventObs.observe(pressedKeys, NewGame.getArrayOfLayers());
+EventObs.observe(pressedKeys, NewGame.getArrayOfLayers(), NewGame.getSpaceship());
 
 })();
 
