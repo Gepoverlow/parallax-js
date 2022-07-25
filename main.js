@@ -17,26 +17,34 @@ class EventObserver {
     if (arrayOfPressedKeys.includes("ArrowRight")) {
       for (let i = 0; i < layers.length; i++) {
         let layerDomElement = layers[i].getDomElement();
-        let layerCurrentX = layers[i].getXposition();
+        let layerCurrentX = layers[i].getXpositionI();
         let layerMovMultiplier = layers[i].getMovementMultiplier();
-        let layerFutureX = layerCurrentX - 3 * layerMovMultiplier;
+        let layerFutureX = layerCurrentX - 15 * layerMovMultiplier;
         layerDomElement.style.backgroundPositionX = layerFutureX + "px";
-        layers[i].setXposition(layerFutureX);
+        layers[i].setXpositionI(layerFutureX);
 
-        layers[i].getXposition() < -300 ? layers[i].setXposition(1500) : null;
+        layers[i].checkForTranslateForwards();
+
+        if (layers[i].getXpositionI() < layers[i].getXpositionF()) {
+          layers[i].setXpositionI(screen.width);
+        }
       }
     }
 
     if (arrayOfPressedKeys.includes("ArrowLeft")) {
       for (let i = 0; i < layers.length; i++) {
         let layerDomElement = layers[i].getDomElement();
-        let layerCurrentX = layers[i].getXposition();
+        let layerCurrentX = layers[i].getXpositionI();
         let layerMovMultiplier = layers[i].getMovementMultiplier();
-        let layerFutureX = layerCurrentX + 3 * layerMovMultiplier;
+        let layerFutureX = layerCurrentX + 15 * layerMovMultiplier;
         layerDomElement.style.backgroundPositionX = layerFutureX + "px";
-        layers[i].setXposition(layerFutureX);
+        layers[i].setXpositionI(layerFutureX);
 
-        layers[i].getXposition() > 1500 ? layers[i].setXposition(-300) : null;
+        layers[i].checkForTranslateBackwards();
+
+        if (layers[i].getXpositionI() > screen.width) {
+          layers[i].setXpositionI(layers[i].getXpositionF());
+        }
       }
     }
   }
@@ -72,10 +80,20 @@ class Game {
   #farPlanetsLayer;
   #ringPlanetLayer;
   constructor() {
-    this.#starsLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(0, document.getElementById("bg-space-stars"), 1);
-    this.#bigPlanetLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(900, document.getElementById("bg-space-big-planet"), 1.5);
-    this.#farPlanetsLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(100, document.getElementById("bg-space-far-planets"), 2);
-    this.#ringPlanetLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(0, document.getElementById("bg-space-ring-planet"), 2.5);
+    this.#starsLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(0, -screen.width, document.getElementById("bg-space-stars"), 0.1);
+    this.#bigPlanetLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(
+      900,
+      -333,
+      document.getElementById("bg-space-big-planet"),
+      0.3
+    );
+    this.#farPlanetsLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(
+      100,
+      -750,
+      document.getElementById("bg-space-far-planets"),
+      0.7
+    );
+    this.#ringPlanetLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(0, -180, document.getElementById("bg-space-ring-planet"), 1);
   }
 
   getStarsLayer() {
@@ -116,20 +134,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 class Layer {
   #initialXposition;
+  #finalXposition;
   #domElement;
   #movementMultiplier;
-  constructor(initialXposition, domElement, movementMultiplier) {
+  constructor(initialXposition, finalXposition, domElement, movementMultiplier) {
     this.#initialXposition = initialXposition;
+    this.#finalXposition = finalXposition;
     this.#domElement = domElement;
     this.#movementMultiplier = movementMultiplier;
   }
 
-  getXposition() {
+  getXpositionI() {
     return this.#initialXposition;
   }
 
-  setXposition(newXValue) {
+  setXpositionI(newXValue) {
     this.#initialXposition = newXValue;
+  }
+
+  getXpositionF() {
+    return this.#finalXposition;
+  }
+
+  setXpositionF(newXValue) {
+    this.#finalXposition = newXValue;
   }
 
   getDomElement() {
@@ -146,6 +174,30 @@ class Layer {
 
   setMovementMultiplier(newMultiplierValue) {
     this.#domElement = newMultiplierValue;
+  }
+
+  checkForTranslateForwards() {
+    if (
+      this.getXpositionI() < this.getXpositionF() - 30 ||
+      this.getXpositionI() > screen.width - 30
+    ) {
+      this.#domElement.classList.remove("transition-effect");
+    } else if (this.getXpositionI() < screen.width - this.getXpositionF() - 80) {
+      this.#domElement.classList.add("transition-effect");
+    }
+  }
+
+  checkForTranslateBackwards() {
+    console.log(this.getXpositionI());
+    console.log(this.getXpositionF());
+    if (
+      this.getXpositionI() > screen.width - 30 ||
+      this.getXpositionI() < this.getXpositionF() - 30
+    ) {
+      this.#domElement.classList.remove("transition-effect");
+    } else if (this.getXpositionI() > this.getXpositionF() + 80) {
+      this.#domElement.classList.add("transition-effect");
+    }
   }
 }
 
