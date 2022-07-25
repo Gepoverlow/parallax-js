@@ -4,6 +4,39 @@
   margin: 0;
 }
 
-body {
-  background: black;
+#container-all {
+  height: 100vh;
+  background-image: url("./space_background_pack/layers/parallax-space-backgound.png");
+  background-size: cover;
+  overflow: hidden;
+}
+
+.bg-layer {
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+#bg-space-big-planet {
+  background-image: url("./space_background_pack/layers/parallax-space-big-planet.png");
+  background-position-x: 900px;
+  background-position-y: 100px;
+  background-size: 30%;
+}
+
+#bg-space-far-planets {
+  background-image: url("./space_background_pack/layers/parallax-space-far-planets.png");
+  background-position: center;
+}
+
+#bg-space-ring-planet {
+  background-image: url("./space_background_pack/layers/parallax-space-ring-planet.png");
+  background-size: 20%;
+  background-position-y: 100px;
+}
+
+#bg-space-stars {
+  background-image: url("./space_background_pack/layers/parallax-space-stars.png");
 }
