@@ -1,10 +1,13 @@
 import { Layer } from "./Layer";
+import { Spaceship } from "./Spaceship";
 
 class Game {
   #starsLayer;
   #bigPlanetLayer;
   #farPlanetsLayer;
   #ringPlanetLayer;
+
+  #spaceShip;
   constructor() {
     this.#starsLayer = new Layer(0, -screen.width, document.getElementById("bg-space-stars"), 0.1);
     this.#bigPlanetLayer = new Layer(
@@ -20,6 +23,8 @@ class Game {
       0.7
     );
     this.#ringPlanetLayer = new Layer(0, -180, document.getElementById("bg-space-ring-planet"), 1);
+
+    this.#spaceShip = new Spaceship();
   }
 
   getStarsLayer() {
@@ -40,6 +45,10 @@ class Game {
 
   getArrayOfLayers() {
     return [this.#starsLayer, this.#bigPlanetLayer, this.#farPlanetsLayer, this.#ringPlanetLayer];
+  }
+
+  getSpaceship() {
+    return this.#spaceShip;
   }
 }
 

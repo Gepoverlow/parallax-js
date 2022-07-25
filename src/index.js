@@ -27,4 +27,4 @@ function removePressedKey(e) {
   }
 }
 
-EventObs.observe(pressedKeys, NewGame.getArrayOfLayers());
+EventObs.observe(pressedKeys, NewGame.getArrayOfLayers(), NewGame.getSpaceship());

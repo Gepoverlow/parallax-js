@@ -29,7 +29,6 @@
   background-position-x: 900px;
   background-position-y: 100px;
   background-size: 350px;
-  animation: bgScrollBigPlanet 50s linear infinite;
 }
 
 #bg-space-far-planets {
@@ -37,7 +36,6 @@
   background-position-y: 50px;
   background-position-x: 100px;
   background-size: 900px;
-  animation: bgScrollFarPlanets 30s linear infinite;
 }
 
 #bg-space-ring-planet {
@@ -45,48 +43,22 @@
   background-size: 200px;
   background-position-y: 200px;
   background-position-x: 0px;
-  animation: bgScrollRingPlanet 10s linear infinite;
 }
 
 #bg-space-stars {
   background-image: url("./space_background_pack/layers/parallax-space-stars.png");
   background-size: 100%;
-  animation: bgScrollStars 80s linear infinite;
   background-repeat: repeat-x;
 }
 
-/* @keyframes bgScrollRingPlanet {
-  100% {
-    background-position-x: -150px;
-  }
-  0% {
-    background-position-x: 100vw;
-  }
+#spaceship {
+  background-image: url("./space_background_pack/spaceship.png");
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  background-repeat: no-repeat;
+  background-size: 100px;
+  background-position-x: 200px;
+  background-position-y: 200px;
+  transition: background-position 0.3s ease;
 }
-
-@keyframes bgScrollBigPlanet {
-  0% {
-    background-position-x: 100vw;
-  }
-  100% {
-    background-position-x: -300px;
-  }
-}
-
-@keyframes bgScrollFarPlanets {
-  0% {
-    background-position-x: 100vw;
-  }
-  100% {
-    background-position-x: -900px;
-  }
-}
-
-@keyframes bgScrollStars {
-  0% {
-    background-position-x: 100vw;
-  }
-  100% {
-    background-position-x: -900px;
-  }
-} */
