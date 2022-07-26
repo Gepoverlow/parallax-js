@@ -62,3 +62,12 @@
   background-position-y: 200px;
   transition: background-position 0.3s ease;
 }
+
+.missile {
+  background-image: url("./space_background_pack/missile.png");
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  background-repeat: no-repeat;
+  background-size: 100px;
+}
