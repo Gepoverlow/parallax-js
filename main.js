@@ -35,7 +35,7 @@ class EventObserver {
     }
 
     if (arrayOfPressedKeys.includes("Space")) {
-      spaceship.handleMissile();
+      spaceship.shootMissile();
     }
   }
 
@@ -63,6 +63,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Layer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Layer */ "./src/classes/Layer.js");
 /* harmony import */ var _Spaceship__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Spaceship */ "./src/classes/Spaceship.js");
+/* harmony import */ var _Meteorite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Meteorite */ "./src/classes/Meteorite.js");
+
 
 
 
@@ -75,11 +77,25 @@ class Game {
   #spaceShip;
   constructor() {
     this.#starsLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(0, -screen.width, document.getElementById("bg-space-stars"), 0.1);
-    this.#bigPlanetLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(900, -333, document.getElementById("bg-space-big-planet"), 0.3);
-    this.#farPlanetsLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(100, -750, document.getElementById("bg-space-far-planets"), 0.7);
-    this.#ringPlanetLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(0, -180, document.getElementById("bg-space-ring-planet"), 1);
+    this.#bigPlanetLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(900, -333, document.getElementById("bg-space-big-planet"), 0.4);
+    this.#farPlanetsLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(100, -750, document.getElementById("bg-space-far-planets"), 0.2);
+    this.#ringPlanetLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(0, -180, document.getElementById("bg-space-ring-planet"), 0.7);
 
     this.#spaceShip = new _Spaceship__WEBPACK_IMPORTED_MODULE_1__.Spaceship();
+  }
+
+  init() {
+    setInterval(() => {
+      this.launchMeteorite();
+    }, 3000);
+  }
+
+  launchMeteorite() {
+    let randomHeight = this.randomIntFromInterval(0, window.innerHeight - 100);
+    let fixedWidth = screen.width;
+
+    let meteorite = new _Meteorite__WEBPACK_IMPORTED_MODULE_2__.Meteorite(fixedWidth, randomHeight);
+    meteorite.startTrajectory();
   }
 
   getStarsLayer() {
@@ -104,6 +120,10 @@ class Game {
 
   getSpaceship() {
     return this.#spaceShip;
+  }
+
+  randomIntFromInterval(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
   }
 }
 
@@ -218,6 +238,96 @@ class Layer {
 
 /***/ }),
 
+/***/ "./src/classes/Meteorite.js":
+/*!**********************************!*\
+  !*** ./src/classes/Meteorite.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Meteorite": () => (/* binding */ Meteorite)
+/* harmony export */ });
+class Meteorite {
+  #xPosition;
+  #yPosition;
+  #domElement;
+  #hasBeenDestroyed;
+  constructor(initialX, initialY) {
+    this.#xPosition = initialX;
+    this.#yPosition = initialY;
+    this.#domElement = this.createDomElement();
+    this.#hasBeenDestroyed = false;
+  }
+
+  createDomElement() {
+    let meteorite = document.createElement("div");
+    meteorite.className = "meteorite";
+    meteorite.style.backgroundPositionX = this.getXposition() + "px";
+    meteorite.style.backgroundPositionY = this.getYposition() + "px";
+    document.getElementById("container-all").appendChild(meteorite);
+    return meteorite;
+  }
+
+  startTrajectory() {
+    this.checkIfOffscreen();
+
+    if (!this.getHasBeenDestroyed()) {
+      let domElement = this.getDomElement();
+      let currentX = this.getXposition();
+      let nextX = currentX - 10;
+      this.setXposition(nextX);
+      domElement.style.backgroundPositionX = nextX + "px";
+
+      setTimeout(() => {
+        this.startTrajectory();
+      }, 200);
+    } else {
+      let domElement = this.getDomElement();
+      document.getElementById("container-all").removeChild(domElement);
+    }
+  }
+
+  checkIfOffscreen() {
+    if (this.getXposition() < -100) {
+      this.setHasBeenDestroyed(true);
+    }
+  }
+
+  getXposition() {
+    return this.#xPosition;
+  }
+
+  setXposition(newX) {
+    this.#xPosition = newX;
+  }
+
+  getYposition() {
+    return this.#yPosition;
+  }
+
+  setYposition(newY) {
+    this.#yPosition = newY;
+  }
+
+  getDomElement() {
+    return this.#domElement;
+  }
+
+  getHasBeenDestroyed() {
+    return this.#hasBeenDestroyed;
+  }
+
+  setHasBeenDestroyed(bool) {
+    this.#hasBeenDestroyed = bool;
+  }
+}
+
+
+
+
+/***/ }),
+
 /***/ "./src/classes/Missile.js":
 /*!********************************!*\
   !*** ./src/classes/Missile.js ***!
@@ -273,7 +383,7 @@ class Missile {
   }
 
   startTrajectory() {
-    this.checkIfImpacted();
+    this.checkIfOffscreen();
 
     if (!this.getHasImpacted()) {
       let domElement = this.getDomElement();
@@ -291,7 +401,7 @@ class Missile {
     }
   }
 
-  checkIfImpacted() {
+  checkIfOffscreen() {
     if (this.getXposition() > screen.width) {
       this.setHasImpacted(true);
     }
@@ -358,14 +468,9 @@ class Spaceship {
     }
   }
 
-  handleMissile() {
+  shootMissile() {
     let missile = new _Missile__WEBPACK_IMPORTED_MODULE_0__.Missile(this.getXposition(), this.getYposition());
     missile.startTrajectory();
-    this.shootMissile(missile);
-  }
-
-  shootMissile(missileObject) {
-    console.log(missileObject);
   }
 
   getXposition() {
@@ -470,8 +575,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const EventObs = new _classes_EventObserver__WEBPACK_IMPORTED_MODULE_0__.EventObserver();
-const NewGame = new _classes_Game__WEBPACK_IMPORTED_MODULE_1__.Game();
+const eventObs = new _classes_EventObserver__WEBPACK_IMPORTED_MODULE_0__.EventObserver();
+const newGame = new _classes_Game__WEBPACK_IMPORTED_MODULE_1__.Game();
 
 const pressedKeys = [];
 
@@ -496,7 +601,8 @@ function removePressedKey(e) {
   }
 }
 
-EventObs.observe(pressedKeys, NewGame.getArrayOfLayers(), NewGame.getSpaceship());
+eventObs.observe(pressedKeys, newGame.getArrayOfLayers(), newGame.getSpaceship());
+newGame.init();
 
 })();
 
