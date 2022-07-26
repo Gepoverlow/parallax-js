@@ -39,6 +39,45 @@ class Spaceship {
     missile.startTrajectory();
   }
 
+  checkForCollision(meteorite) {
+    let spaceshipXposition = this.getXposition();
+    let spaceshipYposition = this.getYposition();
+
+    let meteoriteXposition = meteorite.getXposition();
+    let meteoriteYposition = meteorite.getYposition();
+
+    // let leftPos = spaceshipXposition + 10 > meteoriteXposition - 10;
+    // let rightPos = spaceshipXposition - 10 < meteoriteXposition + 10;
+
+    // let topPos = spaceshipYposition + 10 > meteoriteYposition - 10;
+    // let bottomPos = spaceshipYposition - 10 < meteoriteYposition + 10;
+
+    if (
+      spaceshipYposition + 10 < meteoriteYposition ||
+      spaceshipYposition > meteoriteYposition + 30 ||
+      spaceshipXposition + 10 < meteoriteXposition ||
+      spaceshipXposition > meteoriteXposition + 30
+      // leftPos &&
+      // rightPos &&
+      // topPos &&
+      // bottomPos
+    ) {
+      console.log("not touching");
+    } else {
+      console.log("touching");
+      meteorite.setHasBeenDestroyed(true);
+    }
+
+    // ((a.y + a.height) < (b.y)) ||
+    //     (a.y > (b.y + b.height)) ||
+    //     ((a.x + a.width) < b.x) ||
+    //     (a.x > (b.x + b.width))
+
+    // if (spaceshipXposition + 50 >= meteoriteXposition + 50) {
+    //   console.log("craseh deteced");
+    // }
+  }
+
   getXposition() {
     return this.#bgPositionX;
   }

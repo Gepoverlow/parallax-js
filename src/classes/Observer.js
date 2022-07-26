@@ -25,14 +25,15 @@ class Observer {
     }
   }
 
-  observeFlyingObjects(arrayOfFlyingObjects) {
-    for (let i = 0; i < arrayOfFlyingObjects.length; i++) {
-      let isDestroyed = arrayOfFlyingObjects[i].getHasBeenDestroyed();
+  observeFlyingMeteorites(arrayOfFlyingMeteorites, spaceship) {
+    for (let i = 0; i < arrayOfFlyingMeteorites.length; i++) {
+      let isDestroyed = arrayOfFlyingMeteorites[i].getHasBeenDestroyed();
       if (isDestroyed) {
-        this.removeObjectFromArray(arrayOfFlyingObjects, arrayOfFlyingObjects[i].getUid());
+        this.removeObjectFromArray(arrayOfFlyingMeteorites, arrayOfFlyingMeteorites[i].getUid());
+      } else {
+        spaceship.checkForCollision(arrayOfFlyingMeteorites[i]);
       }
     }
-    console.log(arrayOfFlyingObjects);
   }
 
   observeEvents(arrayOfPressedKeys, layers, spaceship) {
@@ -40,9 +41,9 @@ class Observer {
       this.observeKeysPressed(arrayOfPressedKeys, layers, spaceship);
     }, 100);
   }
-  observeObjects(arrayOfFlyingObjects) {
+  observeObjects(arrayOfFlyingMeteorites, spaceship) {
     setInterval(() => {
-      this.observeFlyingObjects(arrayOfFlyingObjects);
+      this.observeFlyingMeteorites(arrayOfFlyingMeteorites, spaceship);
     }, 100);
   }
 
@@ -52,7 +53,6 @@ class Observer {
         return x.getUid();
       })
       .indexOf(uid);
-    console.log(i);
     array.splice(i, 1);
   }
 }

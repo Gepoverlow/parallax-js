@@ -8,7 +8,7 @@ class Game {
   #farPlanetsLayer;
   #ringPlanetLayer;
 
-  #arrayOfFlyingObjects;
+  #arrayOfFlyingMeteorites;
 
   #spaceShip;
   constructor() {
@@ -17,7 +17,7 @@ class Game {
     this.#farPlanetsLayer = new Layer(100, -750, document.getElementById("bg-space-far-planets"), 0.2);
     this.#ringPlanetLayer = new Layer(0, -180, document.getElementById("bg-space-ring-planet"), 0.7);
 
-    this.#arrayOfFlyingObjects = [];
+    this.#arrayOfFlyingMeteorites = [];
 
     this.#spaceShip = new Spaceship();
   }
@@ -33,13 +33,13 @@ class Game {
     let fixedWidth = screen.width;
 
     let meteorite = new Meteorite(fixedWidth, randomHeight);
-    this.#arrayOfFlyingObjects.push(meteorite);
+    this.#arrayOfFlyingMeteorites.push(meteorite);
 
     meteorite.startTrajectory();
   }
 
   removeDestroyedMeteoriteFromArray() {
-    let objectsArray = this.getArrayOfFlyingObjects();
+    let objectsArray = this.getarrayOfFlyingMeteorites();
     for (let i = 0; i < objectsArray.length; i++) {
       if (objectsArray[i].getHasBeenDestroyed()) {
         let uid = objectsArray[i].getUid();
@@ -76,12 +76,12 @@ class Game {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
-  getArrayOfFlyingObjects() {
-    return this.#arrayOfFlyingObjects;
+  getarrayOfFlyingMeteorites() {
+    return this.#arrayOfFlyingMeteorites;
   }
 
-  setArrayOfFlyingObjects(newArray) {
-    this.#arrayOfFlyingObjects = newArray;
+  setarrayOfFlyingMeteorites(newArray) {
+    this.#arrayOfFlyingMeteorites = newArray;
   }
 }
 

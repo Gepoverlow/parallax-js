@@ -25,7 +25,7 @@ class Game {
   #farPlanetsLayer;
   #ringPlanetLayer;
 
-  #arrayOfFlyingObjects;
+  #arrayOfFlyingMeteorites;
 
   #spaceShip;
   constructor() {
@@ -34,7 +34,7 @@ class Game {
     this.#farPlanetsLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(100, -750, document.getElementById("bg-space-far-planets"), 0.2);
     this.#ringPlanetLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(0, -180, document.getElementById("bg-space-ring-planet"), 0.7);
 
-    this.#arrayOfFlyingObjects = [];
+    this.#arrayOfFlyingMeteorites = [];
 
     this.#spaceShip = new _Spaceship__WEBPACK_IMPORTED_MODULE_1__.Spaceship();
   }
@@ -50,13 +50,13 @@ class Game {
     let fixedWidth = screen.width;
 
     let meteorite = new _Meteorite__WEBPACK_IMPORTED_MODULE_2__.Meteorite(fixedWidth, randomHeight);
-    this.#arrayOfFlyingObjects.push(meteorite);
+    this.#arrayOfFlyingMeteorites.push(meteorite);
 
     meteorite.startTrajectory();
   }
 
   removeDestroyedMeteoriteFromArray() {
-    let objectsArray = this.getArrayOfFlyingObjects();
+    let objectsArray = this.getarrayOfFlyingMeteorites();
     for (let i = 0; i < objectsArray.length; i++) {
       if (objectsArray[i].getHasBeenDestroyed()) {
         let uid = objectsArray[i].getUid();
@@ -93,12 +93,12 @@ class Game {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
-  getArrayOfFlyingObjects() {
-    return this.#arrayOfFlyingObjects;
+  getarrayOfFlyingMeteorites() {
+    return this.#arrayOfFlyingMeteorites;
   }
 
-  setArrayOfFlyingObjects(newArray) {
-    this.#arrayOfFlyingObjects = newArray;
+  setarrayOfFlyingMeteorites(newArray) {
+    this.#arrayOfFlyingMeteorites = newArray;
   }
 }
 
@@ -438,14 +438,15 @@ class Observer {
     }
   }
 
-  observeFlyingObjects(arrayOfFlyingObjects) {
-    for (let i = 0; i < arrayOfFlyingObjects.length; i++) {
-      let isDestroyed = arrayOfFlyingObjects[i].getHasBeenDestroyed();
+  observeFlyingMeteorites(arrayOfFlyingMeteorites, spaceship) {
+    for (let i = 0; i < arrayOfFlyingMeteorites.length; i++) {
+      let isDestroyed = arrayOfFlyingMeteorites[i].getHasBeenDestroyed();
       if (isDestroyed) {
-        this.removeObjectFromArray(arrayOfFlyingObjects, arrayOfFlyingObjects[i].getUid());
+        this.removeObjectFromArray(arrayOfFlyingMeteorites, arrayOfFlyingMeteorites[i].getUid());
+      } else {
+        spaceship.checkForCollision(arrayOfFlyingMeteorites[i]);
       }
     }
-    console.log(arrayOfFlyingObjects);
   }
 
   observeEvents(arrayOfPressedKeys, layers, spaceship) {
@@ -453,9 +454,9 @@ class Observer {
       this.observeKeysPressed(arrayOfPressedKeys, layers, spaceship);
     }, 100);
   }
-  observeObjects(arrayOfFlyingObjects) {
+  observeObjects(arrayOfFlyingMeteorites, spaceship) {
     setInterval(() => {
-      this.observeFlyingObjects(arrayOfFlyingObjects);
+      this.observeFlyingMeteorites(arrayOfFlyingMeteorites, spaceship);
     }, 100);
   }
 
@@ -465,7 +466,6 @@ class Observer {
         return x.getUid();
       })
       .indexOf(uid);
-    console.log(i);
     array.splice(i, 1);
   }
 }
@@ -525,6 +525,45 @@ class Spaceship {
   shootMissile() {
     let missile = new _Missile__WEBPACK_IMPORTED_MODULE_0__.Missile(this.getXposition(), this.getYposition());
     missile.startTrajectory();
+  }
+
+  checkForCollision(meteorite) {
+    let spaceshipXposition = this.getXposition();
+    let spaceshipYposition = this.getYposition();
+
+    let meteoriteXposition = meteorite.getXposition();
+    let meteoriteYposition = meteorite.getYposition();
+
+    // let leftPos = spaceshipXposition + 10 > meteoriteXposition - 10;
+    // let rightPos = spaceshipXposition - 10 < meteoriteXposition + 10;
+
+    // let topPos = spaceshipYposition + 10 > meteoriteYposition - 10;
+    // let bottomPos = spaceshipYposition - 10 < meteoriteYposition + 10;
+
+    if (
+      spaceshipYposition + 10 < meteoriteYposition ||
+      spaceshipYposition > meteoriteYposition + 30 ||
+      spaceshipXposition + 10 < meteoriteXposition ||
+      spaceshipXposition > meteoriteXposition + 30
+      // leftPos &&
+      // rightPos &&
+      // topPos &&
+      // bottomPos
+    ) {
+      console.log("not touching");
+    } else {
+      console.log("touching");
+      meteorite.setHasBeenDestroyed(true);
+    }
+
+    // ((a.y + a.height) < (b.y)) ||
+    //     (a.y > (b.y + b.height)) ||
+    //     ((a.x + a.width) < b.x) ||
+    //     (a.x > (b.x + b.width))
+
+    // if (spaceshipXposition + 50 >= meteoriteXposition + 50) {
+    //   console.log("craseh deteced");
+    // }
   }
 
   getXposition() {
@@ -656,7 +695,7 @@ function removePressedKey(e) {
 }
 
 Obs.observeEvents(pressedKeys, newGame.getArrayOfLayers(), newGame.getSpaceship());
-Obs.observeObjects(newGame.getArrayOfFlyingObjects());
+Obs.observeObjects(newGame.getarrayOfFlyingMeteorites(), newGame.getSpaceship());
 newGame.init();
 
 })();
