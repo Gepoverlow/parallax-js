@@ -8,12 +8,16 @@ class Game {
   #farPlanetsLayer;
   #ringPlanetLayer;
 
+  #arrayOfFlyingObjects;
+
   #spaceShip;
   constructor() {
     this.#starsLayer = new Layer(0, -screen.width, document.getElementById("bg-space-stars"), 0.1);
     this.#bigPlanetLayer = new Layer(900, -333, document.getElementById("bg-space-big-planet"), 0.4);
     this.#farPlanetsLayer = new Layer(100, -750, document.getElementById("bg-space-far-planets"), 0.2);
     this.#ringPlanetLayer = new Layer(0, -180, document.getElementById("bg-space-ring-planet"), 0.7);
+
+    this.#arrayOfFlyingObjects = [];
 
     this.#spaceShip = new Spaceship();
   }
@@ -29,7 +33,19 @@ class Game {
     let fixedWidth = screen.width;
 
     let meteorite = new Meteorite(fixedWidth, randomHeight);
+    this.#arrayOfFlyingObjects.push(meteorite);
+
     meteorite.startTrajectory();
+  }
+
+  removeDestroyedMeteoriteFromArray() {
+    let objectsArray = this.getArrayOfFlyingObjects();
+    for (let i = 0; i < objectsArray.length; i++) {
+      if (objectsArray[i].getHasBeenDestroyed()) {
+        let uid = objectsArray[i].getUid();
+        this.removeObjectFromArray(objectsArray, uid);
+      }
+    }
   }
 
   getStarsLayer() {
@@ -58,6 +74,14 @@ class Game {
 
   randomIntFromInterval(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+
+  getArrayOfFlyingObjects() {
+    return this.#arrayOfFlyingObjects;
+  }
+
+  setArrayOfFlyingObjects(newArray) {
+    this.#arrayOfFlyingObjects = newArray;
   }
 }
 

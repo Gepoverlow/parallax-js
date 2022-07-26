@@ -2,55 +2,6 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/classes/EventObserver.js":
-/*!**************************************!*\
-  !*** ./src/classes/EventObserver.js ***!
-  \**************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "EventObserver": () => (/* binding */ EventObserver)
-/* harmony export */ });
-class EventObserver {
-  observeKeysPressed(arrayOfPressedKeys, layers, spaceship) {
-    if (arrayOfPressedKeys.includes("ArrowRight")) {
-      for (let i = 0; i < layers.length; i++) {
-        layers[i].moveLayerRight();
-      }
-    }
-
-    if (arrayOfPressedKeys.includes("ArrowLeft")) {
-      for (let i = 0; i < layers.length; i++) {
-        layers[i].moveLayerLeft();
-      }
-    }
-
-    if (arrayOfPressedKeys.includes("ArrowUp")) {
-      spaceship.moveUp();
-    }
-
-    if (arrayOfPressedKeys.includes("ArrowDown")) {
-      spaceship.moveDown();
-    }
-
-    if (arrayOfPressedKeys.includes("Space")) {
-      spaceship.shootMissile();
-    }
-  }
-
-  observe(arrayOfPressedKeys, layers, spaceship) {
-    setInterval(() => {
-      this.observeKeysPressed(arrayOfPressedKeys, layers, spaceship);
-    }, 100);
-  }
-}
-
-
-
-
-/***/ }),
-
 /***/ "./src/classes/Game.js":
 /*!*****************************!*\
   !*** ./src/classes/Game.js ***!
@@ -74,12 +25,16 @@ class Game {
   #farPlanetsLayer;
   #ringPlanetLayer;
 
+  #arrayOfFlyingObjects;
+
   #spaceShip;
   constructor() {
     this.#starsLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(0, -screen.width, document.getElementById("bg-space-stars"), 0.1);
     this.#bigPlanetLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(900, -333, document.getElementById("bg-space-big-planet"), 0.4);
     this.#farPlanetsLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(100, -750, document.getElementById("bg-space-far-planets"), 0.2);
     this.#ringPlanetLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(0, -180, document.getElementById("bg-space-ring-planet"), 0.7);
+
+    this.#arrayOfFlyingObjects = [];
 
     this.#spaceShip = new _Spaceship__WEBPACK_IMPORTED_MODULE_1__.Spaceship();
   }
@@ -95,7 +50,19 @@ class Game {
     let fixedWidth = screen.width;
 
     let meteorite = new _Meteorite__WEBPACK_IMPORTED_MODULE_2__.Meteorite(fixedWidth, randomHeight);
+    this.#arrayOfFlyingObjects.push(meteorite);
+
     meteorite.startTrajectory();
+  }
+
+  removeDestroyedMeteoriteFromArray() {
+    let objectsArray = this.getArrayOfFlyingObjects();
+    for (let i = 0; i < objectsArray.length; i++) {
+      if (objectsArray[i].getHasBeenDestroyed()) {
+        let uid = objectsArray[i].getUid();
+        this.removeObjectFromArray(objectsArray, uid);
+      }
+    }
   }
 
   getStarsLayer() {
@@ -124,6 +91,14 @@ class Game {
 
   randomIntFromInterval(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+
+  getArrayOfFlyingObjects() {
+    return this.#arrayOfFlyingObjects;
+  }
+
+  setArrayOfFlyingObjects(newArray) {
+    this.#arrayOfFlyingObjects = newArray;
   }
 }
 
@@ -253,11 +228,13 @@ class Meteorite {
   #yPosition;
   #domElement;
   #hasBeenDestroyed;
+  #uid;
   constructor(initialX, initialY) {
     this.#xPosition = initialX;
     this.#yPosition = initialY;
     this.#domElement = this.createDomElement();
     this.#hasBeenDestroyed = false;
+    this.#uid = Date.now().toString(36) + Math.random().toString(36).substr(2);
   }
 
   createDomElement() {
@@ -278,18 +255,21 @@ class Meteorite {
       let nextX = currentX - 10;
       this.setXposition(nextX);
       domElement.style.backgroundPositionX = nextX + "px";
-
       setTimeout(() => {
         this.startTrajectory();
-      }, 200);
+      }, 100);
     } else {
       let domElement = this.getDomElement();
       document.getElementById("container-all").removeChild(domElement);
     }
   }
 
+  getUid() {
+    return this.#uid;
+  }
+
   checkIfOffscreen() {
-    if (this.getXposition() < -100) {
+    if (this.getXposition() < -300) {
       this.setHasBeenDestroyed(true);
     }
   }
@@ -416,6 +396,80 @@ class Missile {
     return missile;
   }
 }
+
+
+
+/***/ }),
+
+/***/ "./src/classes/Observer.js":
+/*!*********************************!*\
+  !*** ./src/classes/Observer.js ***!
+  \*********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Observer": () => (/* binding */ Observer)
+/* harmony export */ });
+class Observer {
+  observeKeysPressed(arrayOfPressedKeys, layers, spaceship) {
+    if (arrayOfPressedKeys.includes("ArrowRight")) {
+      for (let i = 0; i < layers.length; i++) {
+        layers[i].moveLayerRight();
+      }
+    }
+
+    if (arrayOfPressedKeys.includes("ArrowLeft")) {
+      for (let i = 0; i < layers.length; i++) {
+        layers[i].moveLayerLeft();
+      }
+    }
+
+    if (arrayOfPressedKeys.includes("ArrowUp")) {
+      spaceship.moveUp();
+    }
+
+    if (arrayOfPressedKeys.includes("ArrowDown")) {
+      spaceship.moveDown();
+    }
+
+    if (arrayOfPressedKeys.includes("Space")) {
+      spaceship.shootMissile();
+    }
+  }
+
+  observeFlyingObjects(arrayOfFlyingObjects) {
+    for (let i = 0; i < arrayOfFlyingObjects.length; i++) {
+      let isDestroyed = arrayOfFlyingObjects[i].getHasBeenDestroyed();
+      if (isDestroyed) {
+        this.removeObjectFromArray(arrayOfFlyingObjects, arrayOfFlyingObjects[i].getUid());
+      }
+    }
+    console.log(arrayOfFlyingObjects);
+  }
+
+  observeEvents(arrayOfPressedKeys, layers, spaceship) {
+    setInterval(() => {
+      this.observeKeysPressed(arrayOfPressedKeys, layers, spaceship);
+    }, 100);
+  }
+  observeObjects(arrayOfFlyingObjects) {
+    setInterval(() => {
+      this.observeFlyingObjects(arrayOfFlyingObjects);
+    }, 100);
+  }
+
+  removeObjectFromArray(array, uid) {
+    let i = array
+      .map((x) => {
+        return x.getUid();
+      })
+      .indexOf(uid);
+    console.log(i);
+    array.splice(i, 1);
+  }
+}
+
 
 
 
@@ -570,12 +624,12 @@ var __webpack_exports__ = {};
   !*** ./src/index.js ***!
   \**********************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _classes_EventObserver__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./classes/EventObserver */ "./src/classes/EventObserver.js");
+/* harmony import */ var _classes_Observer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./classes/Observer */ "./src/classes/Observer.js");
 /* harmony import */ var _classes_Game__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./classes/Game */ "./src/classes/Game.js");
 
 
 
-const eventObs = new _classes_EventObserver__WEBPACK_IMPORTED_MODULE_0__.EventObserver();
+const Obs = new _classes_Observer__WEBPACK_IMPORTED_MODULE_0__.Observer();
 const newGame = new _classes_Game__WEBPACK_IMPORTED_MODULE_1__.Game();
 
 const pressedKeys = [];
@@ -601,7 +655,8 @@ function removePressedKey(e) {
   }
 }
 
-eventObs.observe(pressedKeys, newGame.getArrayOfLayers(), newGame.getSpaceship());
+Obs.observeEvents(pressedKeys, newGame.getArrayOfLayers(), newGame.getSpaceship());
+Obs.observeObjects(newGame.getArrayOfFlyingObjects());
 newGame.init();
 
 })();

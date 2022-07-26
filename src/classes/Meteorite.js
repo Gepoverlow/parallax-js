@@ -3,11 +3,13 @@ class Meteorite {
   #yPosition;
   #domElement;
   #hasBeenDestroyed;
+  #uid;
   constructor(initialX, initialY) {
     this.#xPosition = initialX;
     this.#yPosition = initialY;
     this.#domElement = this.createDomElement();
     this.#hasBeenDestroyed = false;
+    this.#uid = Date.now().toString(36) + Math.random().toString(36).substr(2);
   }
 
   createDomElement() {
@@ -28,18 +30,21 @@ class Meteorite {
       let nextX = currentX - 10;
       this.setXposition(nextX);
       domElement.style.backgroundPositionX = nextX + "px";
-
       setTimeout(() => {
         this.startTrajectory();
-      }, 200);
+      }, 100);
     } else {
       let domElement = this.getDomElement();
       document.getElementById("container-all").removeChild(domElement);
     }
   }
 
+  getUid() {
+    return this.#uid;
+  }
+
   checkIfOffscreen() {
-    if (this.getXposition() < -100) {
+    if (this.getXposition() < -300) {
       this.setHasBeenDestroyed(true);
     }
   }
