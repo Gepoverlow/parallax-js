@@ -27,13 +27,15 @@ class EventObserver {
     }
 
     if (arrayOfPressedKeys.includes("ArrowUp")) {
-      console.log("moves up");
       spaceship.moveUp();
     }
 
     if (arrayOfPressedKeys.includes("ArrowDown")) {
-      console.log("moves down");
       spaceship.moveDown();
+    }
+
+    if (arrayOfPressedKeys.includes("Space")) {
+      spaceship.handleMissile();
     }
   }
 
@@ -216,6 +218,99 @@ class Layer {
 
 /***/ }),
 
+/***/ "./src/classes/Missile.js":
+/*!********************************!*\
+  !*** ./src/classes/Missile.js ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Missile": () => (/* binding */ Missile)
+/* harmony export */ });
+class Missile {
+  #xPosition;
+  #yPosition;
+  #domElement;
+  #hasImpacted;
+  constructor(startingXposition, startingYposition) {
+    this.#xPosition = startingXposition;
+    this.#yPosition = startingYposition;
+    this.#domElement = this.createDomElement();
+    this.#hasImpacted = false;
+  }
+
+  getXposition() {
+    return this.#xPosition;
+  }
+
+  setXposition(newX) {
+    this.#xPosition = newX;
+  }
+
+  getYposition() {
+    return this.#yPosition;
+  }
+
+  setYposition(newY) {
+    this.#xPosition = newY;
+  }
+
+  getDomElement() {
+    return this.#domElement;
+  }
+
+  setDomElement(newDom) {
+    this.setDomElement = newDom;
+  }
+
+  getHasImpacted() {
+    return this.#hasImpacted;
+  }
+
+  setHasImpacted(bool) {
+    this.#hasImpacted = bool;
+  }
+
+  startTrajectory() {
+    this.checkIfImpacted();
+
+    if (!this.getHasImpacted()) {
+      let domElement = this.getDomElement();
+      let currentX = this.getXposition();
+      let nextX = currentX + 5;
+      this.setXposition(nextX);
+      domElement.style.backgroundPositionX = nextX + "px";
+
+      setTimeout(() => {
+        this.startTrajectory();
+      }, 50);
+    } else {
+      let domElement = this.getDomElement();
+      document.getElementById("container-all").removeChild(domElement);
+    }
+  }
+
+  checkIfImpacted() {
+    if (this.getXposition() > screen.width) {
+      this.setHasImpacted(true);
+    }
+  }
+
+  createDomElement() {
+    let missile = document.createElement("div");
+    missile.className = "missile";
+    missile.style.backgroundPositionX = this.getXposition() + 50 + "px";
+    missile.style.backgroundPositionY = this.getYposition() + 33 + "px";
+    document.getElementById("container-all").appendChild(missile);
+    return missile;
+  }
+}
+
+
+
+/***/ }),
+
 /***/ "./src/classes/Spaceship.js":
 /*!**********************************!*\
   !*** ./src/classes/Spaceship.js ***!
@@ -226,6 +321,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Spaceship": () => (/* binding */ Spaceship)
 /* harmony export */ });
+/* harmony import */ var _Missile__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Missile */ "./src/classes/Missile.js");
+
+
 class Spaceship {
   #bgPositionX;
   #bgPositionY;
@@ -258,6 +356,16 @@ class Spaceship {
       this.setYposition(futureYposition);
       spaceshipDomElement.style.backgroundPositionY = futureYposition + "px";
     }
+  }
+
+  handleMissile() {
+    let missile = new _Missile__WEBPACK_IMPORTED_MODULE_0__.Missile(this.getXposition(), this.getYposition());
+    missile.startTrajectory();
+    this.shootMissile(missile);
+  }
+
+  shootMissile(missileObject) {
+    console.log(missileObject);
   }
 
   getXposition() {

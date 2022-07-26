@@ -1,3 +1,5 @@
+import { Missile } from "./Missile";
+
 class Spaceship {
   #bgPositionX;
   #bgPositionY;
@@ -30,6 +32,16 @@ class Spaceship {
       this.setYposition(futureYposition);
       spaceshipDomElement.style.backgroundPositionY = futureYposition + "px";
     }
+  }
+
+  handleMissile() {
+    let missile = new Missile(this.getXposition(), this.getYposition());
+    missile.startTrajectory();
+    this.shootMissile(missile);
+  }
+
+  shootMissile(missileObject) {
+    console.log(missileObject);
   }
 
   getXposition() {

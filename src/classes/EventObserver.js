@@ -13,13 +13,15 @@ class EventObserver {
     }
 
     if (arrayOfPressedKeys.includes("ArrowUp")) {
-      console.log("moves up");
       spaceship.moveUp();
     }
 
     if (arrayOfPressedKeys.includes("ArrowDown")) {
-      console.log("moves down");
       spaceship.moveDown();
+    }
+
+    if (arrayOfPressedKeys.includes("Space")) {
+      spaceship.handleMissile();
     }
   }
 
