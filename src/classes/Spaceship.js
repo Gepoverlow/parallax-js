@@ -46,36 +46,36 @@ class Spaceship {
     let meteoriteXposition = meteorite.getXposition();
     let meteoriteYposition = meteorite.getYposition();
 
-    // let leftPos = spaceshipXposition + 10 > meteoriteXposition - 10;
-    // let rightPos = spaceshipXposition - 10 < meteoriteXposition + 10;
+    // let spaceshipTopLeft = spaceshipYposition;
+    // let spaceshipTopRight = spaceshipYposition;
+    // let spaceshipBottomLeft = spaceshipYposition + 100;
+    // let spaceshipBottomRight = spaceshipYposition + 100;
 
-    // let topPos = spaceshipYposition + 10 > meteoriteYposition - 10;
-    // let bottomPos = spaceshipYposition - 10 < meteoriteYposition + 10;
+    // let meteoriteTopLeft = meteoriteXposition;
+    // let meteoriteTopRight = meteoriteXposition + 100;
+    // let meteoriteBottomLeft = meteoriteXposition;
+    // let meteoriteBottomRight = meteoriteXposition + 100;
+
+    // console.log(`x=${spaceshipXposition}, y=${spaceshipYposition}`);
+
+    // console.log(
+    //   `SPACESHIP: topLeft:${spaceshipTopLeft}, topRight:${spaceshipTopRight}, bottomLeft:${spaceshipBottomLeft}, bottomRight:${spaceshipBottomRight}`
+    // );
+    // console.log(
+    //   `METORITE: topLeft:${meteoriteTopLeft}, topRight:${meteoriteTopRight}, bottomLeft:${meteoriteBottomLeft}, bottomRight:${meteoriteBottomRight}`
+    // );
+
+    console.log(spaceshipXposition);
 
     if (
-      spaceshipYposition + 10 < meteoriteYposition ||
-      spaceshipYposition > meteoriteYposition + 30 ||
-      spaceshipXposition + 10 < meteoriteXposition ||
-      spaceshipXposition > meteoriteXposition + 30
-      // leftPos &&
-      // rightPos &&
-      // topPos &&
-      // bottomPos
+      spaceshipXposition >= meteoriteXposition &&
+      spaceshipXposition <= meteoriteXposition &&
+      spaceshipYposition + 100 >= meteoriteYposition &&
+      spaceshipYposition <= meteoriteYposition + 100
     ) {
-      console.log("not touching");
-    } else {
-      console.log("touching");
       meteorite.setHasBeenDestroyed(true);
+      console.log("horizontal collision");
     }
-
-    // ((a.y + a.height) < (b.y)) ||
-    //     (a.y > (b.y + b.height)) ||
-    //     ((a.x + a.width) < b.x) ||
-    //     (a.x > (b.x + b.width))
-
-    // if (spaceshipXposition + 50 >= meteoriteXposition + 50) {
-    //   console.log("craseh deteced");
-    // }
   }
 
   getXposition() {

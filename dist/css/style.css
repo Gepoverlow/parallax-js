@@ -80,6 +80,6 @@
   background-repeat: no-repeat;
   background-size: 100px;
   transition: background-position 1s ease;
-  background-position-x: 250px;
-  background-position-y: 250px;
+  background-position-x: 0px;
+  background-position-y: 0px;
 }
