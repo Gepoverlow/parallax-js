@@ -73,18 +73,8 @@ class Game {
   #spaceShip;
   constructor() {
     this.#starsLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(0, -screen.width, document.getElementById("bg-space-stars"), 0.1);
-    this.#bigPlanetLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(
-      900,
-      -333,
-      document.getElementById("bg-space-big-planet"),
-      0.3
-    );
-    this.#farPlanetsLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(
-      100,
-      -750,
-      document.getElementById("bg-space-far-planets"),
-      0.7
-    );
+    this.#bigPlanetLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(900, -333, document.getElementById("bg-space-big-planet"), 0.3);
+    this.#farPlanetsLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(100, -750, document.getElementById("bg-space-far-planets"), 0.7);
     this.#ringPlanetLayer = new _Layer__WEBPACK_IMPORTED_MODULE_0__.Layer(0, -180, document.getElementById("bg-space-ring-planet"), 1);
 
     this.#spaceShip = new _Spaceship__WEBPACK_IMPORTED_MODULE_1__.Spaceship();
@@ -175,10 +165,7 @@ class Layer {
   }
 
   checkForTranslateForwards() {
-    if (
-      this.getXpositionI() < this.getXpositionF() - 30 ||
-      this.getXpositionI() > screen.width - 30
-    ) {
+    if (this.getXpositionI() < this.getXpositionF() - 30 || this.getXpositionI() > screen.width - 30) {
       this.#domElement.classList.remove("transition-effect");
     } else if (this.getXpositionI() < screen.width - this.getXpositionF() - 80) {
       this.#domElement.classList.add("transition-effect");
@@ -186,10 +173,7 @@ class Layer {
   }
 
   checkForTranslateBackwards() {
-    if (
-      this.getXpositionI() > screen.width - 30 ||
-      this.getXpositionI() < this.getXpositionF() - 30
-    ) {
+    if (this.getXpositionI() > screen.width - 30 || this.getXpositionI() < this.getXpositionF() - 30) {
       this.#domElement.classList.remove("transition-effect");
     } else if (this.getXpositionI() > this.getXpositionF() + 80) {
       this.#domElement.classList.add("transition-effect");
@@ -257,19 +241,23 @@ class Spaceship {
   }
 
   moveUp() {
-    let spaceshipDomElement = this.getDomElement();
-    let previousYposition = this.getYposition();
-    let futureYposition = previousYposition - this.getMovSpeed();
-    this.setYposition(futureYposition);
-    spaceshipDomElement.style.backgroundPositionY = futureYposition + "px";
+    if (this.getYposition() > 0) {
+      let spaceshipDomElement = this.getDomElement();
+      let previousYposition = this.getYposition();
+      let futureYposition = previousYposition - this.getMovSpeed();
+      this.setYposition(futureYposition);
+      spaceshipDomElement.style.backgroundPositionY = futureYposition + "px";
+    }
   }
 
   moveDown() {
-    let spaceshipDomElement = this.getDomElement();
-    let previousYposition = this.getYposition();
-    let futureYposition = previousYposition + this.getMovSpeed();
-    this.setYposition(futureYposition);
-    spaceshipDomElement.style.backgroundPositionY = futureYposition + "px";
+    if (this.getYposition() < window.innerHeight - 100) {
+      let spaceshipDomElement = this.getDomElement();
+      let previousYposition = this.getYposition();
+      let futureYposition = previousYposition + this.getMovSpeed();
+      this.setYposition(futureYposition);
+      spaceshipDomElement.style.backgroundPositionY = futureYposition + "px";
+    }
   }
 
   getXposition() {

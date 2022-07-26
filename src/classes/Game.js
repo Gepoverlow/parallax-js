@@ -10,18 +10,8 @@ class Game {
   #spaceShip;
   constructor() {
     this.#starsLayer = new Layer(0, -screen.width, document.getElementById("bg-space-stars"), 0.1);
-    this.#bigPlanetLayer = new Layer(
-      900,
-      -333,
-      document.getElementById("bg-space-big-planet"),
-      0.3
-    );
-    this.#farPlanetsLayer = new Layer(
-      100,
-      -750,
-      document.getElementById("bg-space-far-planets"),
-      0.7
-    );
+    this.#bigPlanetLayer = new Layer(900, -333, document.getElementById("bg-space-big-planet"), 0.3);
+    this.#farPlanetsLayer = new Layer(100, -750, document.getElementById("bg-space-far-planets"), 0.7);
     this.#ringPlanetLayer = new Layer(0, -180, document.getElementById("bg-space-ring-planet"), 1);
 
     this.#spaceShip = new Spaceship();

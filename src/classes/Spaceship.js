@@ -13,19 +13,23 @@ class Spaceship {
   }
 
   moveUp() {
-    let spaceshipDomElement = this.getDomElement();
-    let previousYposition = this.getYposition();
-    let futureYposition = previousYposition - this.getMovSpeed();
-    this.setYposition(futureYposition);
-    spaceshipDomElement.style.backgroundPositionY = futureYposition + "px";
+    if (this.getYposition() > 0) {
+      let spaceshipDomElement = this.getDomElement();
+      let previousYposition = this.getYposition();
+      let futureYposition = previousYposition - this.getMovSpeed();
+      this.setYposition(futureYposition);
+      spaceshipDomElement.style.backgroundPositionY = futureYposition + "px";
+    }
   }
 
   moveDown() {
-    let spaceshipDomElement = this.getDomElement();
-    let previousYposition = this.getYposition();
-    let futureYposition = previousYposition + this.getMovSpeed();
-    this.setYposition(futureYposition);
-    spaceshipDomElement.style.backgroundPositionY = futureYposition + "px";
+    if (this.getYposition() < window.innerHeight - 100) {
+      let spaceshipDomElement = this.getDomElement();
+      let previousYposition = this.getYposition();
+      let futureYposition = previousYposition + this.getMovSpeed();
+      this.setYposition(futureYposition);
+      spaceshipDomElement.style.backgroundPositionY = futureYposition + "px";
+    }
   }
 
   getXposition() {

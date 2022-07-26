@@ -43,10 +43,7 @@ class Layer {
   }
 
   checkForTranslateForwards() {
-    if (
-      this.getXpositionI() < this.getXpositionF() - 30 ||
-      this.getXpositionI() > screen.width - 30
-    ) {
+    if (this.getXpositionI() < this.getXpositionF() - 30 || this.getXpositionI() > screen.width - 30) {
       this.#domElement.classList.remove("transition-effect");
     } else if (this.getXpositionI() < screen.width - this.getXpositionF() - 80) {
       this.#domElement.classList.add("transition-effect");
@@ -54,10 +51,7 @@ class Layer {
   }
 
   checkForTranslateBackwards() {
-    if (
-      this.getXpositionI() > screen.width - 30 ||
-      this.getXpositionI() < this.getXpositionF() - 30
-    ) {
+    if (this.getXpositionI() > screen.width - 30 || this.getXpositionI() < this.getXpositionF() - 30) {
       this.#domElement.classList.remove("transition-effect");
     } else if (this.getXpositionI() > this.getXpositionF() + 80) {
       this.#domElement.classList.add("transition-effect");
