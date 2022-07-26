@@ -43,7 +43,7 @@ class Missile {
   }
 
   startTrajectory() {
-    this.checkIfImpacted();
+    this.checkIfOffscreen();
 
     if (!this.getHasImpacted()) {
       let domElement = this.getDomElement();
@@ -61,7 +61,7 @@ class Missile {
     }
   }
 
-  checkIfImpacted() {
+  checkIfOffscreen() {
     if (this.getXposition() > screen.width) {
       this.setHasImpacted(true);
     }

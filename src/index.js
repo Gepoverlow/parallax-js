@@ -1,8 +1,8 @@
 import { EventObserver } from "./classes/EventObserver";
 import { Game } from "./classes/Game";
 
-const EventObs = new EventObserver();
-const NewGame = new Game();
+const eventObs = new EventObserver();
+const newGame = new Game();
 
 const pressedKeys = [];
 
@@ -27,4 +27,5 @@ function removePressedKey(e) {
   }
 }
 
-EventObs.observe(pressedKeys, NewGame.getArrayOfLayers(), NewGame.getSpaceship());
+eventObs.observe(pressedKeys, newGame.getArrayOfLayers(), newGame.getSpaceship());
+newGame.init();

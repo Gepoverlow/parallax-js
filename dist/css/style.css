@@ -71,3 +71,13 @@
   background-repeat: no-repeat;
   background-size: 100px;
 }
+
+.meteorite {
+  background-image: url("./space_background_pack/meteorite.png");
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  background-repeat: no-repeat;
+  background-size: 100px;
+  transition: background-position 1s ease;
+}

@@ -1,5 +1,6 @@
 import { Layer } from "./Layer";
 import { Spaceship } from "./Spaceship";
+import { Meteorite } from "./Meteorite";
 
 class Game {
   #starsLayer;
@@ -10,11 +11,25 @@ class Game {
   #spaceShip;
   constructor() {
     this.#starsLayer = new Layer(0, -screen.width, document.getElementById("bg-space-stars"), 0.1);
-    this.#bigPlanetLayer = new Layer(900, -333, document.getElementById("bg-space-big-planet"), 0.3);
-    this.#farPlanetsLayer = new Layer(100, -750, document.getElementById("bg-space-far-planets"), 0.7);
-    this.#ringPlanetLayer = new Layer(0, -180, document.getElementById("bg-space-ring-planet"), 1);
+    this.#bigPlanetLayer = new Layer(900, -333, document.getElementById("bg-space-big-planet"), 0.4);
+    this.#farPlanetsLayer = new Layer(100, -750, document.getElementById("bg-space-far-planets"), 0.2);
+    this.#ringPlanetLayer = new Layer(0, -180, document.getElementById("bg-space-ring-planet"), 0.7);
 
     this.#spaceShip = new Spaceship();
+  }
+
+  init() {
+    setInterval(() => {
+      this.launchMeteorite();
+    }, 3000);
+  }
+
+  launchMeteorite() {
+    let randomHeight = this.randomIntFromInterval(0, window.innerHeight - 100);
+    let fixedWidth = screen.width;
+
+    let meteorite = new Meteorite(fixedWidth, randomHeight);
+    meteorite.startTrajectory();
   }
 
   getStarsLayer() {
@@ -39,6 +54,10 @@ class Game {
 
   getSpaceship() {
     return this.#spaceShip;
+  }
+
+  randomIntFromInterval(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
   }
 }
 

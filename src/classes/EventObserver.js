@@ -21,7 +21,7 @@ class EventObserver {
     }
 
     if (arrayOfPressedKeys.includes("Space")) {
-      spaceship.handleMissile();
+      spaceship.shootMissile();
     }
   }
 

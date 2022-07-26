@@ -34,14 +34,9 @@ class Spaceship {
     }
   }
 
-  handleMissile() {
+  shootMissile() {
     let missile = new Missile(this.getXposition(), this.getYposition());
     missile.startTrajectory();
-    this.shootMissile(missile);
-  }
-
-  shootMissile(missileObject) {
-    console.log(missileObject);
   }
 
   getXposition() {
