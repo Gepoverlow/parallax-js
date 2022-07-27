@@ -8,6 +8,7 @@ class Spaceship {
   #hitbox;
   #hasCrashed;
   #arrayOfFlyingMissiles;
+
   constructor() {
     this.#bgPositionX = 200;
     this.#bgPositionY = 200;
@@ -62,7 +63,6 @@ class Spaceship {
       spaceShipRect.top <= meteoriteRect.bottom
     ) {
       console.log("crash!");
-      // meteorite.setHasBeenDestroyed(true);
       this.setHasCrashed(true);
     }
   }

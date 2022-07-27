@@ -578,6 +578,7 @@ class Spaceship {
   #hitbox;
   #hasCrashed;
   #arrayOfFlyingMissiles;
+
   constructor() {
     this.#bgPositionX = 200;
     this.#bgPositionY = 200;
@@ -632,7 +633,6 @@ class Spaceship {
       spaceShipRect.top <= meteoriteRect.bottom
     ) {
       console.log("crash!");
-      // meteorite.setHasBeenDestroyed(true);
       this.setHasCrashed(true);
     }
   }
@@ -760,9 +760,18 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const Obs = new _classes_Observer__WEBPACK_IMPORTED_MODULE_0__.Observer();
-const newGame = new _classes_Game__WEBPACK_IMPORTED_MODULE_1__.Game();
+let newGame = new _classes_Game__WEBPACK_IMPORTED_MODULE_1__.Game();
 
 const pressedKeys = [];
+const newGameButton = document.getElementById("ng-button");
+
+newGameButton.addEventListener("click", () => {
+  newGame = new _classes_Game__WEBPACK_IMPORTED_MODULE_1__.Game();
+  newGame.init();
+
+  Obs.observeEvents(pressedKeys, newGame.getArrayOfLayers(), newGame.getSpaceship());
+  Obs.observeObjects(newGame.getarrayOfFlyingMeteorites(), newGame.getSpaceship());
+});
 
 document.addEventListener("keydown", (e) => {
   addPressedKey(e);
@@ -785,9 +794,10 @@ function removePressedKey(e) {
   }
 }
 
+newGame.init();
+
 Obs.observeEvents(pressedKeys, newGame.getArrayOfLayers(), newGame.getSpaceship());
 Obs.observeObjects(newGame.getarrayOfFlyingMeteorites(), newGame.getSpaceship());
-newGame.init();
 
 })();
 

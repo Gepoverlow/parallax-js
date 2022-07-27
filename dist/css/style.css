@@ -85,7 +85,7 @@ body {
 }
 
 .meteorite {
-  background-image: url("./space_background_pack/meteorite.png");
+  background-image: url("./space_background_pack/ezgif.com-gif-maker.gif");
   height: 100vh;
   width: 100vw;
   position: absolute;
@@ -106,4 +106,15 @@ body {
   position: absolute;
   width: 20px;
   height: 20px;
+}
+
+#ng-button {
+  position: absolute;
+  color: rgb(102, 88, 88);
+  font-size: 50px;
+  top: 20px;
+  left: 20px;
+  cursor: pointer;
+  z-index: 2;
+  display: none;
 }
