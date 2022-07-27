@@ -4,6 +4,10 @@
   margin: 0;
 }
 
+body {
+  overflow: hidden;
+}
+
 #container-all {
   height: 100vh;
   background-image: url("./space_background_pack/layers/parallax-space-backgound.png");
