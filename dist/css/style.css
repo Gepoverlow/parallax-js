@@ -91,3 +91,9 @@
   background-position-x: 0px;
   background-position-y: 0px;
 }
+
+.meteorite-hitbox {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+}
