@@ -36,6 +36,20 @@ class Observer {
     }
   }
 
+  observeFlyingMissiles(arrayOfFlyingMeteorites, spaceship) {
+    let arrayOfMissiles = spaceship.getArrayOfFlyingMissiles();
+    for (let i = 0; i < arrayOfMissiles.length; i++) {
+      let hasImpacted = arrayOfMissiles[i].getHasImpacted();
+      if (hasImpacted) {
+        this.removeObjectFromArray(arrayOfMissiles, arrayOfMissiles[i].getUid());
+      } else {
+        for (let j = 0; j < arrayOfFlyingMeteorites.length; j++) {
+          arrayOfMissiles[i].checkForCollision(arrayOfFlyingMeteorites[j]);
+        }
+      }
+    }
+  }
+
   observeEvents(arrayOfPressedKeys, layers, spaceship) {
     setInterval(() => {
       this.observeKeysPressed(arrayOfPressedKeys, layers, spaceship);
@@ -43,6 +57,7 @@ class Observer {
   }
   observeObjects(arrayOfFlyingMeteorites, spaceship) {
     setInterval(() => {
+      this.observeFlyingMissiles(arrayOfFlyingMeteorites, spaceship);
       this.observeFlyingMeteorites(arrayOfFlyingMeteorites, spaceship);
     }, 100);
   }

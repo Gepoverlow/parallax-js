@@ -42,7 +42,7 @@ class Game {
   init() {
     setInterval(() => {
       this.launchMeteorite();
-    }, 3000);
+    }, 1000);
   }
 
   launchMeteorite() {
@@ -342,13 +342,19 @@ class Missile {
   #yPosition;
   #domElement;
   #hasImpacted;
+  #uid;
   #hitbox;
   constructor(startingXposition, startingYposition) {
     this.#xPosition = startingXposition;
     this.#yPosition = startingYposition;
     this.#domElement = this.createDomElement();
     this.#hasImpacted = false;
+    this.#uid = Date.now().toString(36) + Math.random().toString(36).substr(2);
     this.#hitbox = this.createHitbox();
+  }
+
+  getUid() {
+    return this.#uid;
   }
 
   getHitbox() {
@@ -437,6 +443,25 @@ class Missile {
     document.getElementById("container-all").appendChild(hitbox);
     return hitbox;
   }
+
+  checkForCollision(meteorite) {
+    let missileHitbox = this.getHitbox();
+    let meteoriteHitbox = meteorite.getHitbox();
+
+    let missileRect = missileHitbox.getBoundingClientRect();
+    let meteoriteRect = meteoriteHitbox.getBoundingClientRect();
+
+    if (
+      missileRect.right >= meteoriteRect.left &&
+      missileRect.left <= meteoriteRect.right &&
+      missileRect.bottom >= meteoriteRect.top &&
+      missileRect.top <= meteoriteRect.bottom
+    ) {
+      console.log("its a hit!");
+      this.setHasImpacted(true);
+      meteorite.setHasBeenDestroyed(true);
+    }
+  }
 }
 
 
@@ -491,6 +516,20 @@ class Observer {
     }
   }
 
+  observeFlyingMissiles(arrayOfFlyingMeteorites, spaceship) {
+    let arrayOfMissiles = spaceship.getArrayOfFlyingMissiles();
+    for (let i = 0; i < arrayOfMissiles.length; i++) {
+      let hasImpacted = arrayOfMissiles[i].getHasImpacted();
+      if (hasImpacted) {
+        this.removeObjectFromArray(arrayOfMissiles, arrayOfMissiles[i].getUid());
+      } else {
+        for (let j = 0; j < arrayOfFlyingMeteorites.length; j++) {
+          arrayOfMissiles[i].checkForCollision(arrayOfFlyingMeteorites[j]);
+        }
+      }
+    }
+  }
+
   observeEvents(arrayOfPressedKeys, layers, spaceship) {
     setInterval(() => {
       this.observeKeysPressed(arrayOfPressedKeys, layers, spaceship);
@@ -498,6 +537,7 @@ class Observer {
   }
   observeObjects(arrayOfFlyingMeteorites, spaceship) {
     setInterval(() => {
+      this.observeFlyingMissiles(arrayOfFlyingMeteorites, spaceship);
       this.observeFlyingMeteorites(arrayOfFlyingMeteorites, spaceship);
     }, 100);
   }
@@ -537,7 +577,7 @@ class Spaceship {
   #movSpeed;
   #hitbox;
   #hasCrashed;
-
+  #arrayOfFlyingMissiles;
   constructor() {
     this.#bgPositionX = 200;
     this.#bgPositionY = 200;
@@ -545,6 +585,7 @@ class Spaceship {
     this.#movSpeed = 40;
     this.#hitbox = document.getElementById("spaceship-hitbox");
     this.#hasCrashed = false;
+    this.#arrayOfFlyingMissiles = [];
   }
 
   moveUp() {
@@ -573,6 +614,7 @@ class Spaceship {
 
   shootMissile() {
     let missile = new _Missile__WEBPACK_IMPORTED_MODULE_0__.Missile(this.getXposition(), this.getYposition());
+    this.#arrayOfFlyingMissiles.push(missile);
     missile.startTrajectory();
   }
 
@@ -633,6 +675,14 @@ class Spaceship {
 
   setHasCrashed(bool) {
     this.#hasCrashed = bool;
+  }
+
+  getArrayOfFlyingMissiles() {
+    return this.#arrayOfFlyingMissiles;
+  }
+
+  setArrayOfFlyingMissiles(newArr) {
+    this.#arrayOfFlyingMissiles = newArr;
   }
 }
 
@@ -737,7 +787,7 @@ function removePressedKey(e) {
 
 Obs.observeEvents(pressedKeys, newGame.getArrayOfLayers(), newGame.getSpaceship());
 Obs.observeObjects(newGame.getarrayOfFlyingMeteorites(), newGame.getSpaceship());
-//newGame.init();
+newGame.init();
 
 })();
 

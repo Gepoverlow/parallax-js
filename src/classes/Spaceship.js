@@ -7,7 +7,7 @@ class Spaceship {
   #movSpeed;
   #hitbox;
   #hasCrashed;
-
+  #arrayOfFlyingMissiles;
   constructor() {
     this.#bgPositionX = 200;
     this.#bgPositionY = 200;
@@ -15,6 +15,7 @@ class Spaceship {
     this.#movSpeed = 40;
     this.#hitbox = document.getElementById("spaceship-hitbox");
     this.#hasCrashed = false;
+    this.#arrayOfFlyingMissiles = [];
   }
 
   moveUp() {
@@ -43,6 +44,7 @@ class Spaceship {
 
   shootMissile() {
     let missile = new Missile(this.getXposition(), this.getYposition());
+    this.#arrayOfFlyingMissiles.push(missile);
     missile.startTrajectory();
   }
 
@@ -103,6 +105,14 @@ class Spaceship {
 
   setHasCrashed(bool) {
     this.#hasCrashed = bool;
+  }
+
+  getArrayOfFlyingMissiles() {
+    return this.#arrayOfFlyingMissiles;
+  }
+
+  setArrayOfFlyingMissiles(newArr) {
+    this.#arrayOfFlyingMissiles = newArr;
   }
 }
 

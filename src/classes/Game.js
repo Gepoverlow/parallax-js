@@ -25,7 +25,7 @@ class Game {
   init() {
     setInterval(() => {
       this.launchMeteorite();
-    }, 3000);
+    }, 1000);
   }
 
   launchMeteorite() {

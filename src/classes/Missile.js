@@ -3,13 +3,19 @@ class Missile {
   #yPosition;
   #domElement;
   #hasImpacted;
+  #uid;
   #hitbox;
   constructor(startingXposition, startingYposition) {
     this.#xPosition = startingXposition;
     this.#yPosition = startingYposition;
     this.#domElement = this.createDomElement();
     this.#hasImpacted = false;
+    this.#uid = Date.now().toString(36) + Math.random().toString(36).substr(2);
     this.#hitbox = this.createHitbox();
+  }
+
+  getUid() {
+    return this.#uid;
   }
 
   getHitbox() {
@@ -97,6 +103,25 @@ class Missile {
     hitbox.style.top = this.getYposition() + 33 + "px";
     document.getElementById("container-all").appendChild(hitbox);
     return hitbox;
+  }
+
+  checkForCollision(meteorite) {
+    let missileHitbox = this.getHitbox();
+    let meteoriteHitbox = meteorite.getHitbox();
+
+    let missileRect = missileHitbox.getBoundingClientRect();
+    let meteoriteRect = meteoriteHitbox.getBoundingClientRect();
+
+    if (
+      missileRect.right >= meteoriteRect.left &&
+      missileRect.left <= meteoriteRect.right &&
+      missileRect.bottom >= meteoriteRect.top &&
+      missileRect.top <= meteoriteRect.bottom
+    ) {
+      console.log("its a hit!");
+      this.setHasImpacted(true);
+      meteorite.setHasBeenDestroyed(true);
+    }
   }
 }
 export { Missile };

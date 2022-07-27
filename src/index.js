@@ -29,4 +29,4 @@ function removePressedKey(e) {
 
 Obs.observeEvents(pressedKeys, newGame.getArrayOfLayers(), newGame.getSpaceship());
 Obs.observeObjects(newGame.getarrayOfFlyingMeteorites(), newGame.getSpaceship());
-//newGame.init();
+newGame.init();
